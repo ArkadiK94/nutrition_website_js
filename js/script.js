@@ -42,92 +42,103 @@ window.addEventListener('DOMContentLoaded', () => {
 
     //Timer
 
-    // const deadLine = "2020-08-31";
-    // function timeLeft (endTime){
-    //     const t = Date.parse(endTime) - new Date(),
-    //           days = Math.floor(t/(1000*60*60*24)),
-    //           hours = Math.floor(t/(1000*60*60) % 24),
-    //           minutes = Math.floor(t/(1000*60) % 60),
-    //           seconds = Math.floor(t/(1000) % 60);
-        
-    //     return {
-    //         total : t,
-    //         days : days,
-    //         hours : hours,
-    //         minutes : minutes,
-    //         seconds : seconds
-    //     };
-    // }
-    // function addZero(num){
-    //     if (num >= 0 && num < 10){
-    //         return `0${num}`;
-    //     } else{
-    //         return num;
-    //     }
-    // }
-    // function timerStracture (position, endTime){
-    //     const t = document.querySelector(position),
-    //           days = t.querySelector("#days"),
-    //           hours = t.querySelector("#hours"),
-    //           minutes = t.querySelector("#minutes"),
-    //           seconds = t.querySelector("#seconds"),
-    //           timeUpdating = setInterval(updateTime,1000);
-    //     updateTime();
-
-    //     function updateTime (){
-    //         const time = timeLeft(endTime);
-    //         if (time.total <= 0){
-    //             clearInterval(timeUpdating);
-    //         } else{
-    //             days.innerHTML = addZero(time.days);
-    //             hours.innerHTML = addZero(time.hours);
-    //             minutes.innerHTML = addZero(time.minutes);
-    //             seconds.innerHTML = addZero(time.seconds);
-    //         }
-    //     }
-    // }
-    // timerStracture(".timer", deadLine);
+    const deadline = '2020-10-15T00:00';
 
 
-    const timeToFinish = "10";
-    function timeLeft (endTime){
-        const seconds = timeToFinish;
-        
+    function getTimeRemaining(endtime) {
+        const t = Date.parse(endtime) - Date.parse(new Date()),
+              days = Math.floor(t / (1000 * 60 * 60 * 24)),
+              hours = Math.floor((t / (1000 * 60 * 60)) % 24),
+              minutes = Math.floor((t / 1000 / 60) % 60),
+              seconds = Math.floor((t / 1000) % 60);
+
         return {
-            seconds : seconds
+            'total' : t,
+            'days' : days,
+            'hours': hours,
+            'minutes': minutes,
+            'seconds': seconds
+
         };
     }
-    function addZero(num){
-        if (num >= 0 && num < 10){
+    
+    function getZero(num) {
+        if (num >= 0 && num  < 10) {
             return `0${num}`;
-        } else{
+        }else {
             return num;
         }
     }
-    function timerStracture (position, endTime){
-        const t = document.querySelector(position),
-              days = t.querySelector("#days"),
-              hours = t.querySelector("#hours"),
-              minutes = t.querySelector("#minutes"),
-              seconds = t.querySelector("#seconds"),
-              time = timeLeft(endTime),
-              timeUpdating = setInterval(updateTime,1000);
-        updateTime();
+    function setClock(selector, endtime) {
+        const timer = document.querySelector('.timer'),
+              days = timer.querySelector('#days'),
+              hours = timer.querySelector('#hours'),
+              minutes = timer.querySelector('#minutes'),
+              seconds = timer.querySelector('#seconds'),
+              timeInterval = setInterval(updateClock, 1000);
+        updateClock();
 
-        function updateTime (){
-            if (time.seconds <= -1){
-                clearInterval(timeUpdating);
-            } else{
-                days.innerHTML = "";
-                hours.innerHTML = "";
-                minutes.innerHTML = "";
-                seconds.innerHTML = addZero(time.seconds);
-                time.seconds-- ;
+        function updateClock() {
+            const t = getTimeRemaining(endtime);
 
+            days.innerHTML = getZero(t.days);
+            hours.innerHTML = getZero(t.hours);
+            minutes.innerHTML = getZero(t.minutes);
+            seconds.innerHTML = getZero(t.seconds);
+
+            if (t.total <= 0) {
+
+                clearInterval(timeInterval);
+         
             }
+        }          
+    }
+    setClock('.timer', deadline);
+
+
+    //Trigers
+    function showModal(){
+        modal.classList.add("show");
+        modal.classList.remove("hide");
+        document.body.style.overflow = "hidden";
+        clearTimeout(openModal);
+    }
+
+    function hideModal(){
+        modal.classList.add("hide");
+        modal.classList.remove("show");
+        document.body.style.overflow = "";
+    }
+    function showInPageDowen (){
+        if(document.documentElement.scrollTop + document.documentElement.clientHeight >= document.documentElement.scrollHeight){
+            showModal();
+            window.removeEventListener("scroll", showInPageDowen);
         }
     }
-    timerStracture(".timer", timeToFinish);
 
+    const modalTrigers = document.querySelectorAll("[data-modal]"),
+          modalClose = document.querySelector("[data-close]"),
+          modal = document.querySelector(".modal");
+    
+    modalTrigers.forEach((item, i) =>{
+        item.addEventListener("click",showModal);
+    });
 
+    modalClose.addEventListener("click",hideModal);
+    modal.addEventListener("click",(e)=>{
+        if(e.target === modal){
+            hideModal();
+        }
+    });
+
+    document.addEventListener('keydown',(e)=>{
+        if(e.code === "Escape" && modal.classList.contains("show")){
+            hideModal();
+        }
+    });
+
+    const openModal = setTimeout(showModal, 6000);
+
+    window.addEventListener("scroll", showInPageDowen);
+   
 });
