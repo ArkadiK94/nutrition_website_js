@@ -137,30 +137,45 @@ window.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    const openModal = setTimeout(showModal, 6000);
+    // const openModal = setTimeout(showModal, 6000);
 
     window.addEventListener("scroll", showInPageDowen);
 
     //class for menu tabs
     class MenuTabs {
-        constructor(name, img, text, price, place){
+        constructor(name, img, text, price, place, ...classes){
             this.name = name;
             this.img = img;
             this.text = text;
             this.price = price;
             this.place = place;
+            this.classes = classes;
+            this.changeValue();
         }
-
+        changeValue(){
+            this.price = this.price * 27;
+        }
         showNew(){
-            this.place.innerHTML += `<div class="menu__item">
-            <img src=${this.img} alt="vegy">
-            <h3 class="menu__item-subtitle">Меню ${this.name}</h3>
-            <div class="menu__item-descr">${this.text}</div>
-            <div class="menu__item-divider"></div>
-            <div class="menu__item-price">
-                <div class="menu__item-cost">Цена:</div>
-                <div class="menu__item-total"><span>${this.price}</span> грн/день</div>
-            </div>`;
+            const element = document.createElement("div");
+            
+            if (this.classes.length == 0){
+                this.classes = "menu__item";
+                element.classList.add(this.classes);
+            } else {
+                this.classes.forEach(item => element.classList.add(item));
+            }
+            
+            element.innerHTML += `
+                <img src=${this.img} alt="vegy">
+                <h3 class="menu__item-subtitle">Меню ${this.name}</h3>
+                <div class="menu__item-descr">${this.text}</div>
+                <div class="menu__item-divider"></div>
+                <div class="menu__item-price">
+                    <div class="menu__item-cost">Цена:</div>
+                    <div class="menu__item-total"><span>${this.price}</span> грн/день</div>
+                </div>`;
+
+            this.place.append(element);
         }
     } 
 
@@ -175,18 +190,18 @@ window.addEventListener('DOMContentLoaded', () => {
           text1 = 'Меню "Фитнес" - это новый подход к приготовлению блюд: больше свежих овощей и фруктов. Продукт активных и здоровых людей. Это абсолютно новый продукт с оптимальной ценой и высоким качеством!',
           text2 = 'В меню “Премиум” мы используем не только красивый дизайн упаковки, но и качественное исполнение блюд. Красная рыба, морепродукты, фрукты - ресторанное меню без похода в ресторан!',
           text3 = 'Меню “Постное” - это тщательный подбор ингредиентов: полное отсутствие продуктов животного происхождения, молоко из миндаля, овса, кокоса или гречки, правильное количество белков за счет тофу и импортных вегетарианских стейков.',
-          price1 = 229,
+          price1 = 10,
           price2 = 550,
           price3 = 430;
           
           
-          const item1 = new MenuTabs(name1,img1,text1,price1, tabsInMenu[4]),
+          const item1 = new MenuTabs(name1,img1,text1,price1, tabsInMenu[4], "menu__item", "i", "y","jfdklsj"),
                 item2 = new MenuTabs(name2,img2,text2,price2, tabsInMenu[4]),
                 item3 = new MenuTabs(name3,img3,text3,price3, tabsInMenu[4]);
           
           item1.showNew();
-          item2.showNew();
-          item3.showNew();
+          console.log(item1);
+        
          
 
    
