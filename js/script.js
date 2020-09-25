@@ -137,7 +137,7 @@ window.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    // const openModal = setTimeout(showModal, 6000);
+    const openModal = setTimeout(showModal, 6000);
 
     window.addEventListener("scroll", showInPageDowen);
 
@@ -200,7 +200,48 @@ window.addEventListener('DOMContentLoaded', () => {
                 item3 = new MenuTabs(name3,img3,text3,price3, tabsInMenu[4]);
           
           item1.showNew();
-          console.log(item1);
+          item2.showNew();
+          item3.showNew();
+
+    //post data to server
+
+    const formInPage = document.querySelectorAll("form");
+    formInPage.forEach(item => {
+        item.addEventListener("submit",(e)=>{
+            e.preventDefault();
+            const request = new XMLHttpRequest();
+            request.open("POST","server.php");
+            request.setRequestHeader("Content-type","application/jason");
+            const formDate = new FormData(item);
+            const obj = {},
+                  massage = {
+                      success: "success,we will call you soon",
+                      loading: "loading",
+                      failure : "didnt work,try again later"
+                  };
+            const divMassege = document.createElement("div");
+            item.append(divMassege);
+            divMassege.textContent = massage.loading;
+
+            formDate.forEach((value,key)=>{
+                obj[key] = value;
+            });
+            const jason = JSON.stringify(obj);
+            request.send(jason);
+            request.addEventListener('load',()=>{
+                if(request.status === 200){
+                    divMassege.textContent = massage.success;
+                    setTimeout(()=>{divMassege.textContent="";},2000);
+                    item.reset();
+                } else {
+                    divMassege.textContent = massage.failure;
+                    setTimeout(()=>{divMassege.textContent="";},2000);
+                }
+            });
+
+        });
+    });
+
         
          
 
