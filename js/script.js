@@ -209,9 +209,6 @@ window.addEventListener('DOMContentLoaded', () => {
     formInPage.forEach(item => {
         item.addEventListener("submit",(e)=>{
             e.preventDefault();
-            const request = new XMLHttpRequest();
-            request.open("POST","server.php");
-            request.setRequestHeader("Content-type","application/jason");
             const formDate = new FormData(item);
             const obj = {},
                   massage = {
@@ -227,24 +224,28 @@ window.addEventListener('DOMContentLoaded', () => {
                   margin: 0 auto;
             `;
             item.insertAdjacentElement("afterEnd",divMassege);
-            
             formDate.forEach((value,key)=>{
                 obj[key] = value;
             });
-            const jason = JSON.stringify(obj);
-            request.send(jason);
-            request.addEventListener('load',()=>{
-                if(request.status === 200){
-                    showModalAnswer(massage.success);
-                    item.reset();
-                    divMassege.remove();
-                } else {
-                    showModalAnswer(massage.failure);
-                }
+            fetch("server.php",{
+                method: "POST",
+                headers: {
+                    "Content-type":"application/jason"
+                },
+                body: JSON.stringify(obj)
+            }).then(data => data.text())
+            .then(data => {
+                showModalAnswer(massage.success);
+                console.log(data);
+                divMassege.remove();
+            }).catch(()=>{
+                showModalAnswer(massage.failure);
+            }).finally(()=>{
+                item.reset();
             });
-
         });
     });
+
     function showModalAnswer(massage){
         const prevModal = document.querySelector(".modal__dialog");
         prevModal.classList.add("hide");
@@ -263,7 +264,5 @@ window.addEventListener('DOMContentLoaded', () => {
             newModal.remove();
             hideModal();
         },2000);
-        
-
     }
 });
