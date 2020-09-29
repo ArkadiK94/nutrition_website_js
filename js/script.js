@@ -178,40 +178,40 @@ window.addEventListener('DOMContentLoaded', () => {
             this.place.append(element);
         }
     } 
-
+    const getData = async (url) => {
+        const res = await fetch(url);
+        if(!res.ok){
+            throw new Error(`couldnt fetch url ${url} status ${res.status}`);
+        }
+        return await res.json();
+        
+    };
     const tabsInMenu = document.querySelectorAll(".container");
     tabsInMenu[4].innerHTML = "";
-    const name1 = "Фитнес",
-          name2 = "Премиум",
-          name3 = "Постное",
-          img1 = "img/tabs/vegy.jpg",
-          img2 = "img/tabs/elite.jpg",
-          img3 = "img/tabs/post.jpg",
-          text1 = 'Меню "Фитнес" - это новый подход к приготовлению блюд: больше свежих овощей и фруктов. Продукт активных и здоровых людей. Это абсолютно новый продукт с оптимальной ценой и высоким качеством!',
-          text2 = 'В меню “Премиум” мы используем не только красивый дизайн упаковки, но и качественное исполнение блюд. Красная рыба, морепродукты, фрукты - ресторанное меню без похода в ресторан!',
-          text3 = 'Меню “Постное” - это тщательный подбор ингредиентов: полное отсутствие продуктов животного происхождения, молоко из миндаля, овса, кокоса или гречки, правильное количество белков за счет тофу и импортных вегетарианских стейков.',
-          price1 = 10,
-          price2 = 550,
-          price3 = 430;
-          
-          
-          const item1 = new MenuTabs(name1,img1,text1,price1, tabsInMenu[4], "menu__item", "i", "y","jfdklsj"),
-                item2 = new MenuTabs(name2,img2,text2,price2, tabsInMenu[4]),
-                item3 = new MenuTabs(name3,img3,text3,price3, tabsInMenu[4]);
-          
-          item1.showNew();
-          item2.showNew();
-          item3.showNew();
+    getData("http://localhost:3000/menu")
+    .then(data => {
+        data.forEach(({img,title,descr,price}) => {
+            new MenuTabs(title,img,descr,price, tabsInMenu[4], "menu__item", "i", "y","jfdklsj").showNew();
+        });
+    });
+ 
 
     //post data to server
-
+    const postData = async (url, data) => {
+        const res = await fetch(url,{
+            method: "POST",
+            headers: {
+                "Content-type":"application/json"
+            },
+            body: data
+        });
+        return await res.json();
+    };
     const formInPage = document.querySelectorAll("form");
     formInPage.forEach(item => {
         item.addEventListener("submit",(e)=>{
             e.preventDefault();
-            const formDate = new FormData(item);
-            const obj = {},
-                  massage = {
+            const massage = {
                       success: "success,we will call you soon",
                       loading: "img/form/spinner.svg",
                       failure : "didnt work,try again later"
@@ -224,16 +224,9 @@ window.addEventListener('DOMContentLoaded', () => {
                   margin: 0 auto;
             `;
             item.insertAdjacentElement("afterEnd",divMassege);
-            formDate.forEach((value,key)=>{
-                obj[key] = value;
-            });
-            fetch("server.php",{
-                method: "POST",
-                headers: {
-                    "Content-type":"application/jason"
-                },
-                body: JSON.stringify(obj)
-            }).then(data => data.text())
+            const formDate = new FormData(item);
+            const json = JSON.stringify(Object.fromEntries(formDate.entries()));
+            postData('http://localhost:3000/requests', json)
             .then(data => {
                 showModalAnswer(massage.success);
                 console.log(data);
