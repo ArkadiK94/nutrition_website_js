@@ -103,7 +103,7 @@ window.addEventListener('DOMContentLoaded', () => {
         modal.classList.add("show");
         modal.classList.remove("hide");
         document.body.style.overflow = "hidden";
-        clearTimeout(openModal);
+        // clearTimeout(openModal);
     }
 
     function hideModal(){
@@ -139,7 +139,7 @@ window.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    const openModal = setTimeout(showModal, 6000);
+    // const openModal = setTimeout(showModal, 6000);
 
     window.addEventListener("scroll", showInPageDowen);
 
@@ -408,5 +408,66 @@ window.addEventListener('DOMContentLoaded', () => {
 
         }
     });    
-   
+
+    //calculator
+
+    let weight, hight, age,
+        sex = "female", 
+        retio = 1.375;
+    const result = document.querySelector(".calculating__result span");
+    function calcolation(weight,hight, age, sex, retio){
+        if(!weight || !hight || !age || !sex || !retio){
+            result.textContent = "___";
+            return;
+        }
+
+        if (sex === "female"){
+            result.textContent = Math.round((447.6 + (9.2 * weight) + (3.1 * hight) - (4.3 * age)) * retio);
+        } else {
+            result.textContent = Math.round((88.36 + (13.4 * weight) + (4.8 * hight) - (5.7 * age)) * retio);
+        }
+    }
+    calcolation(weight,hight, age, sex, retio);
+
+    function getStaticData(parent, activeClass){
+        const elements = document.querySelectorAll(`${parent} div`);
+        elements.forEach(element =>{
+            element.addEventListener("click", (e)=>{
+                if (e.target.getAttribute("data-ratio")){
+                    retio = +e.target.getAttribute("data-ratio");
+                } else {
+                    sex = e.target.getAttribute("id");
+                }
+                elements.forEach(element => element.classList.remove(activeClass));
+                e.target.classList.add(activeClass);
+                calcolation(weight,hight, age, sex, retio);
+            });
+        });
+    }
+
+    function getDymanicData(id){
+        const data = document.querySelector(`#${id}`);
+        data.addEventListener("input", (e)=>{
+            const input = e.target;
+            switch (e.target.getAttribute("id")){
+                case "height": 
+                    hight = +input.value;
+                    break;
+                case "weight": 
+                    weight = +input.value;
+                    break;
+                case "age": 
+                    age = +input.value;
+                    break;
+            }
+            calcolation(weight,hight, age, sex, retio);
+        });
+        
+    }
+    getStaticData("#gender","calculating__choose-item_active");
+    getStaticData(".calculating__choose_big", "calculating__choose-item_active" );
+    getDymanicData("height");
+    getDymanicData("weight");
+    getDymanicData("age");
+
 });

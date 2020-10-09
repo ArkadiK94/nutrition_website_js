@@ -39,5 +39,5 @@
 }
 
 .active{
-    background-color: black;
+    opacity: 1;
 }
