@@ -1,4 +1,4 @@
-function slider(){
+function slider({sliderNextSelector,sliderPrevSelector,slidersSelector,counterSliderSelector,sliderWrapperSelector,sliderFiledSelector,allSliderSelector}){
     // //slider 1
     // const sliders = document.querySelectorAll(".offer__slide"),
     //       counterSlider = document.querySelector(".offer__slider-counter");
@@ -58,12 +58,12 @@ function slider(){
         }
     }
 
-    const sliders = document.querySelectorAll(".offer__slide"),
-          counterSlider = document.querySelector(".offer__slider-counter"),
-          sliderWrapper = document.querySelector(".offer__slider-wrapper"),
-          sliderFiled = document.querySelector(".offer__slider-inner"),
+    const sliders = document.querySelectorAll(slidersSelector),
+          counterSlider = document.querySelector(counterSliderSelector),
+          sliderWrapper = document.querySelector(sliderWrapperSelector),
+          sliderFiled = document.querySelector(sliderFiledSelector),
           width = window.getComputedStyle(sliderWrapper).width,
-          allSlider = document.querySelector(".offer__slider"),
+          allSlider = document.querySelector(allSliderSelector),
           divForDots = document.createElement("div");
           
     let indexSlider = 0,
@@ -108,7 +108,7 @@ function slider(){
 
 
     counterSlider.addEventListener('click', (event) => {
-        if (event.target && event.target.classList.contains("offer__slider-prev")){
+        if (event.target && event.target.classList.contains(sliderPrevSelector)){
             indexSlider -= 1;
             if (indexSlider == -1 ){
                 indexSlider = sliders.length-1;
@@ -126,7 +126,7 @@ function slider(){
             }
             sliderFiled.style.transform = `translateX(-${offSet}px)`;
 
-        } else if (event.target && event.target.classList.contains("offer__slider-next")) {
+        } else if (event.target && event.target.classList.contains(sliderNextSelector)) {
             indexSlider += 1;
             if (indexSlider == sliders.length){
                 indexSlider = 0;
@@ -148,4 +148,4 @@ function slider(){
     });    
 }
 
-module.exports = slider;
+export default slider;

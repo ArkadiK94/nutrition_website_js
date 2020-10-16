@@ -95,4 +95,4 @@ function calculatur(){
 
 }
 
-module.exports = calculatur;
+export default calculatur;

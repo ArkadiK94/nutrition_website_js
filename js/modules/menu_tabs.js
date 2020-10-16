@@ -1,4 +1,6 @@
-function menuTabs(){
+import {getData} from "../services/services";
+
+function menuTabs(container){
     //class for menu tabs
     class MenuTabs {
         constructor(name, img, text, price, place, ...classes){
@@ -36,15 +38,8 @@ function menuTabs(){
             this.place.append(element);
         }
     } 
-    const getData = async (url) => {
-        const res = await fetch(url);
-        if(!res.ok){
-            throw new Error(`couldnt fetch url ${url} status ${res.status}`);
-        }
-        return await res.json();
-        
-    };
-    const tabsInMenu = document.querySelectorAll(".container");
+    
+    const tabsInMenu = document.querySelectorAll(container);
     tabsInMenu[4].innerHTML = "";
     getData("http://localhost:3000/menu")
     .then(data => {
@@ -56,4 +51,4 @@ function menuTabs(){
     
 }
 
-module.exports = menuTabs;
+export default menuTabs;

@@ -1,16 +1,11 @@
-function server (){
+import {postData} from '../services/services';
+import {showModal,hideModal} from "./trigers";
+
+function form (formSelector,modalWindow,modalSelector,openModal){
     //post data to server
-    const postData = async (url, data) => {
-        const res = await fetch(url,{
-            method: "POST",
-            headers: {
-                "Content-type":"application/json"
-            },
-            body: data
-        });
-        return await res.json();
-    };
-    const formInPage = document.querySelectorAll("form");
+    const formInPage = document.querySelectorAll(formSelector),
+          modal = document.querySelector(modalSelector);
+    
     formInPage.forEach(item => {
         item.addEventListener("submit",(e)=>{
             e.preventDefault();
@@ -43,11 +38,11 @@ function server (){
     });
 
     function showModalAnswer(massage){
-        const prevModal = document.querySelector(".modal__dialog");
+        const prevModal = document.querySelector(modalWindow);
         prevModal.classList.add("hide");
-        showModal();
+        showModal(modalSelector,openModal);
         const newModal = document.createElement("div");
-        newModal.classList.add("modal__dialog");
+        newModal.classList.add(modalWindow.slice(1));
         modal.append(newModal);
         newModal.innerHTML =`
             <div class="modal__content">
@@ -58,10 +53,10 @@ function server (){
             prevModal.classList.add("show");
             prevModal.classList.remove("hide");
             newModal.remove();
-            hideModal();
+            hideModal(modalSelector);
         },2000);
     }
 
 }
 
-module.exports = server;
+export default form;
