@@ -15,7 +15,7 @@ window.addEventListener('DOMContentLoaded', () => {
     menuTabes(".container",);
     form("form",".modal__dialog",".modal",openModal);
     tabs('.tabcontent','.tabheader__items','.tabheader__item','tabheader__item_active');
-    timer('.timer','2020-12-10T00:00');
+    timer('.timer','2021-12-31T00:00');
     trigers("[data-modal]","[data-close]",".modal",openModal);
     slider({
         slidersSelector: ".offer__slide",

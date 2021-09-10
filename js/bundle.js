@@ -643,6 +643,10 @@ function timer(timerSelector, deadline) {
       seconds.innerHTML = getZero(t.seconds);
 
       if (t.total <= 0) {
+        days.innerHTML = "00";
+        hours.innerHTML = "00";
+        minutes.innerHTML = "00";
+        seconds.innerHTML = "00";
         clearInterval(timeInterval);
       }
     }
@@ -773,7 +777,7 @@ window.addEventListener('DOMContentLoaded', function () {
   (0,_modules_menu_tabs__WEBPACK_IMPORTED_MODULE_1__.default)(".container");
   (0,_modules_form__WEBPACK_IMPORTED_MODULE_2__.default)("form", ".modal__dialog", ".modal", openModal);
   (0,_modules_tabs__WEBPACK_IMPORTED_MODULE_4__.default)('.tabcontent', '.tabheader__items', '.tabheader__item', 'tabheader__item_active');
-  (0,_modules_timer__WEBPACK_IMPORTED_MODULE_6__.default)('.timer', '2020-12-10T00:00');
+  (0,_modules_timer__WEBPACK_IMPORTED_MODULE_6__.default)('.timer', '2021-12-31T00:00');
   (0,_modules_trigers__WEBPACK_IMPORTED_MODULE_5__.default)("[data-modal]", "[data-close]", ".modal", openModal);
   (0,_modules_slider__WEBPACK_IMPORTED_MODULE_3__.default)({
     slidersSelector: ".offer__slide",

@@ -43,9 +43,11 @@ function timer(timerSelector,deadline){
             seconds.innerHTML = getZero(t.seconds);
 
             if (t.total <= 0) {
-
+                days.innerHTML = "00";
+                hours.innerHTML = "00";
+                minutes.innerHTML = "00";
+                seconds.innerHTML = "00";
                 clearInterval(timeInterval);
-         
             }
         }          
     }
